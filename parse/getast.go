@@ -333,7 +333,7 @@ func (fs *FileSet) parseFieldList(fl *ast.FieldList) []gen.StructField {
 // translate *ast.Field into []gen.StructField
 func (fs *FileSet) getField(f *ast.Field) []gen.StructField {
 	sf := make([]gen.StructField, 1)
-	var extension, flatten bool
+	var extension, flatten, isInterface bool
 	// parse tag; otherwise field name is field tag
 	if f.Tag != nil {
 		body := reflect.StructTag(strings.Trim(f.Tag.Value, "`")).Get("msg")
@@ -347,6 +347,8 @@ func (fs *FileSet) getField(f *ast.Field) []gen.StructField {
 				extension = true
 			case "flatten":
 				flatten = true
+			case "interface":
+				isInterface = true
 			}
 		}
 		// ignore "-" fields
@@ -361,6 +363,13 @@ func (fs *FileSet) getField(f *ast.Field) []gen.StructField {
 	ex := fs.parseExpr(f.Type)
 	if ex == nil {
 		return nil
+	}
+
+	if isInterface {
+		switch v := ex.(type) {
+		case *gen.BaseElem:
+			ex = &gen.Ptr{Value: v}
+		}
 	}
 
 	// parse field name
@@ -409,6 +418,7 @@ func (fs *FileSet) getField(f *ast.Field) []gen.StructField {
 			return nil
 		}
 	}
+
 	return sf
 }
 
