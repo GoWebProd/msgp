@@ -5,7 +5,7 @@ import (
 	"go/ast"
 	"strings"
 
-	"github.com/tinylib/msgp/gen"
+	"github.com/GoWebProd/msgp/gen"
 )
 
 const linePrefix = "//msgp:"
