@@ -262,8 +262,11 @@ func (e *encodeGen) gBase(b *BaseElem) {
 	}
 
 	if b.Value == IDENT { // unknown identity
-		e.p.printf("\nerr = %s.EncodeMsg(en)", vname)
+		e.p.printf("\nif %s == nil { err = en.WriteNil();", vname)
 		e.p.wrapErrCheck(e.ctx.ArgsStr())
+		e.p.printf("} else { err = %s.EncodeMsg(en)", vname)
+		e.p.wrapErrCheck(e.ctx.ArgsStr())
+		e.p.closeblock()
 	} else { // typical case
 		e.writeAndCheck(b.BaseName(), literalFmt, vname)
 	}

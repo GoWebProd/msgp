@@ -141,7 +141,7 @@ func (d *decodeGen) gBase(b *BaseElem) {
 			d.p.printf("\n%s, err = dc.ReadBytes(%s)", vname, vname)
 		}
 	case IDENT:
-		d.p.printf("\nerr = %s.DecodeMsg(dc)", vname)
+		d.p.printf("\nif %s == nil { err = dc.Skip() } else { err = %s.DecodeMsg(dc) }", vname, vname)
 	case Ext:
 		d.p.printf("\nerr = dc.ReadExtension(%s)", vname)
 	default:

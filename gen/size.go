@@ -200,13 +200,18 @@ func (s *sizeGen) gBase(b *BaseElem) {
 
 		s.p.printf("\ns += %s", basesizeExpr(b.Value, vname, b.BaseName()))
 		s.state = expr
-
 	} else {
 		vname := b.Varname()
 		if b.Convert {
 			vname = tobaseConvert(b)
 		}
-		s.addConstant(basesizeExpr(b.Value, vname, b.BaseName()))
+
+		if b.Value == IDENT {
+			s.p.printf("\nif %s == nil {\ns += msgp.NilSize\n} else { s += %s.Msgsize() }", vname, vname)
+			s.state = add // closing block; reset to add
+		} else {
+			s.addConstant(basesizeExpr(b.Value, vname, b.BaseName()))
+		}
 	}
 }
 
@@ -280,8 +285,6 @@ func basesizeExpr(value Primitive, vname, basename string) string {
 		return "msgp.ExtensionPrefixSize + " + stripRef(vname) + ".Len()"
 	case Intf:
 		return "msgp.GuessSize(" + vname + ")"
-	case IDENT:
-		return vname + ".Msgsize()"
 	case Bytes:
 		return "msgp.BytesPrefixSize + len(" + vname + ")"
 	case String:

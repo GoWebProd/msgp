@@ -268,8 +268,10 @@ func (m *marshalGen) gBase(b *BaseElem) {
 	var echeck bool
 	switch b.Value {
 	case IDENT:
-		echeck = true
-		m.p.printf("\no, err = %s.MarshalMsg(o)", vname)
+		m.p.printf("\nif %s == nil { o = msgp.AppendNil(o) } else {", vname)
+		m.p.printf("o, err = %s.MarshalMsg(o);", vname)
+		m.p.wrapErrCheck(m.ctx.ArgsStr())
+		m.p.closeblock()
 	case Intf, Ext:
 		echeck = true
 		m.p.printf("\no, err = msgp.Append%s(o, %s)", b.BaseName(), vname)
