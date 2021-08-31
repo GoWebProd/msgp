@@ -1,4 +1,4 @@
-module github.com/tinylib/msgp
+module github.com/GoWebProd/msgp
 
 go 1.14
 
