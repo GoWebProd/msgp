@@ -1,5 +1,7 @@
 package msgp
 
+import "math"
+
 // The sizes provided
 // are the worst-case
 // encoded sizes for
@@ -32,7 +34,22 @@ const (
 	MapHeaderSize   = 5
 	ArrayHeaderSize = 5
 
-	BytesPrefixSize     = 5
-	StringPrefixSize    = 5
 	ExtensionPrefixSize = 6
 )
+
+func StringSize(sz int) int {
+	return sz + stringPrefixSize(sz)
+}
+
+func stringPrefixSize(sz int) int {
+	switch {
+	case sz <= 31:
+		return 1
+	case sz <= math.MaxUint8:
+		return 2
+	case sz <= math.MaxUint16:
+		return 3
+	default:
+		return 4
+	}
+}

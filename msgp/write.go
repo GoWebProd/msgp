@@ -833,9 +833,9 @@ func GuessSize(i interface{}) int {
 	case int8, int16, int32, int64, int:
 		return IntSize
 	case []byte:
-		return BytesPrefixSize + len(i)
+		return StringSize(len(i))
 	case string:
-		return StringPrefixSize + len(i)
+		return StringSize(len(i))
 	case complex64:
 		return Complex64Size
 	case complex128:
@@ -845,13 +845,13 @@ func GuessSize(i interface{}) int {
 	case map[string]interface{}:
 		s := MapHeaderSize
 		for key, val := range i {
-			s += StringPrefixSize + len(key) + GuessSize(val)
+			s += StringSize(len(key)) + GuessSize(val)
 		}
 		return s
 	case map[string]string:
 		s := MapHeaderSize
 		for key, val := range i {
-			s += 2*StringPrefixSize + len(key) + len(val)
+			s += StringSize(len(key)) + StringSize(len(val))
 		}
 		return s
 	default:

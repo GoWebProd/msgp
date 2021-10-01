@@ -16,21 +16,21 @@ BIN = $(GOBIN)/msgp
 .PHONY: clean wipe install get-deps bench all
 
 $(BIN): */*.go
-	@go install ./...
+	@gotip install ./...
 
 install: $(BIN)
 
 $(GGEN): ./_generated/def.go
-	go generate ./_generated
+	gotip generate ./_generated
 
 $(MGEN): ./msgp/defs_test.go
-	go generate ./msgp
+	gotip generate ./msgp
 
 test: all
-	go test ./... ./_generated
+	gotip test ./... ./_generated
 
 bench: all
-	go test -bench ./...
+	gotip test -bench ./...
 
 clean:
 	$(RM) $(GGEN) $(MGEN)
@@ -39,7 +39,7 @@ wipe: clean
 	$(RM) $(BIN)
 
 get-deps:
-	go get -d -t ./...
+	gotip get -d -t ./...
 
 all: install $(GGEN) $(MGEN)
 

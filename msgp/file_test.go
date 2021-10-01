@@ -1,4 +1,4 @@
-// +build linux darwin dragonfly freebsd netbsd openbsd
+//go:build linux || darwin || dragonfly || freebsd || netbsd || openbsd
 
 package msgp_test
 
@@ -19,7 +19,7 @@ func (r rawBytes) MarshalMsg(b []byte) ([]byte, error) {
 }
 
 func (r rawBytes) Msgsize() int {
-	return msgp.BytesPrefixSize + len(r)
+	return msgp.BytesPrefixSize(r) + len(r)
 }
 
 func (r *rawBytes) UnmarshalMsg(b []byte) ([]byte, error) {
