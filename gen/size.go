@@ -284,6 +284,8 @@ func basesizeExpr(value Primitive, vname, basename string) string {
 		return vname + ".Msgsize()"
 	case Bytes, String:
 		return "msgp.StringSize(len(" + vname + "))"
+	case Uint, Uint8, Uint16, Uint32, Uint64, Int, Int8, Int16, Int32, Int64:
+		return "msgp.IntSize(uint64(" + vname + "))"
 	default:
 		return builtinSize(basename)
 	}

@@ -11,14 +11,12 @@ import "math"
 // the prefix size plus the
 // length of the object.
 const (
-	Int64Size      = 9
-	IntSize        = Int64Size
-	UintSize       = Int64Size
 	Int8Size       = 2
 	Int16Size      = 3
 	Int32Size      = 5
-	Uint8Size      = 2
+	Int64Size      = 9
 	ByteSize       = Uint8Size
+	Uint8Size      = 2
 	Uint16Size     = 3
 	Uint32Size     = 5
 	Uint64Size     = Int64Size
@@ -41,6 +39,21 @@ func StringSize(sz int) int {
 	return sz + stringPrefixSize(sz)
 }
 
+func IntSize(u uint64) int {
+	switch {
+	case u <= (1<<7)-1:
+		return 1
+	case u <= math.MaxUint8:
+		return 2
+	case u <= math.MaxUint16:
+		return 3
+	case u <= math.MaxUint32:
+		return 5
+	default:
+		return 9
+	}
+}
+
 func stringPrefixSize(sz int) int {
 	switch {
 	case sz <= 31:
@@ -50,6 +63,6 @@ func stringPrefixSize(sz int) int {
 	case sz <= math.MaxUint16:
 		return 3
 	default:
-		return 4
+		return 5
 	}
 }

@@ -828,10 +828,26 @@ func GuessSize(i interface{}) int {
 		return Float64Size
 	case float32:
 		return Float32Size
-	case uint8, uint16, uint32, uint64, uint:
-		return UintSize
-	case int8, int16, int32, int64, int:
-		return IntSize
+	case uint8:
+		return IntSize(uint64(i))
+	case uint16:
+		return IntSize(uint64(i))
+	case uint32:
+		return IntSize(uint64(i))
+	case uint64:
+		return IntSize(uint64(i))
+	case uint:
+		return IntSize(uint64(i))
+	case int8:
+		return IntSize(uint64(i))
+	case int16:
+		return IntSize(uint64(i))
+	case int32:
+		return IntSize(uint64(i))
+	case int64:
+		return IntSize(uint64(i))
+	case int:
+		return IntSize(uint64(i))
 	case []byte:
 		return StringSize(len(i))
 	case string:
