@@ -282,10 +282,8 @@ func basesizeExpr(value Primitive, vname, basename string) string {
 		return "msgp.GuessSize(" + vname + ")"
 	case IDENT:
 		return vname + ".Msgsize()"
-	case Bytes:
-		return "msgp.BytesPrefixSize(" + vname + ") + len(" + vname + ")"
-	case String:
-		return "msgp.StringPrefixSize(" + vname + ") + len(" + vname + ")"
+	case Bytes, String:
+		return "msgp.StringSize(len(" + vname + "))"
 	default:
 		return builtinSize(basename)
 	}

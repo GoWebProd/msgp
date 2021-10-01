@@ -19,7 +19,7 @@ func (r rawBytes) MarshalMsg(b []byte) ([]byte, error) {
 }
 
 func (r rawBytes) Msgsize() int {
-	return msgp.BytesPrefixSize(r) + len(r)
+	return msgp.StringSize(len(r))
 }
 
 func (r *rawBytes) UnmarshalMsg(b []byte) ([]byte, error) {
